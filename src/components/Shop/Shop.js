@@ -32,37 +32,30 @@ const Shop = () => {
         deleteShoppingCart();
     };
 
-
     useEffect(() => {
         const stored_cart = get_stored_data();
         const saved_cart = [];
+        const ids = Object.keys(stored_cart);
+        fetch('http://localhost:5000/productsById', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(ids)
+        }).then(res => res.json())
+            .then(data => {
+                for (const id in stored_cart) {
+                    const added_product = data.find(product => product._id === id);
+                    if (added_product) {
+                        const quantity = stored_cart[id];
+                        added_product.quantity = quantity;
+                        saved_cart.push(added_product);
+                    }
+                }
+                set_cart(saved_cart);
+            });
 
-        for (const id in stored_cart) {
-            const added_product = products.find(product => product._id === id);
-            if (added_product) {
-                const quantity = stored_cart[id];
-                added_product.quantity = quantity;
-                saved_cart.push(added_product);
-            }
-        }
-        set_cart(saved_cart);
+
     }, [products])
 
-    useEffect(() => {
-        const stored_cart = get_stored_data();
-        const saved_cart = [];
-
-        for (const id in stored_cart) {
-            const added_product = products.find(product => product._id === id);
-
-            if (added_product) {
-                const quantity = stored_cart[id];
-                added_product.quantity = quantity;
-                saved_cart.push(added_product);
-            }
-        }
-        set_cart(saved_cart);
-    }, [products])
 
     const handle_add_to_cart = (selected_product) => {
         const exist_product = cart.find(product => product._id === selected_product._id);
@@ -98,7 +91,7 @@ const Shop = () => {
             <div className='pagination'>
                 <p>Currently selected page: {page} : {size}</p>
                 {
-                    [...Array(page_count).keys()].map(number => <button onClick={() => set_page(number)} className={page === number ? "selected" : ''} key={number}>{number}</button>)
+                    [...Array(page_count).keys()].map(number => <button onClick={() => set_page(number)} className={page === number ? "selected" : ''} key={number}>{number + 1}</button>)
                 }
                 <select defaultValue='10' onChange={event => set_size(event.target.value)}>
                     <option value="5">5</option>
