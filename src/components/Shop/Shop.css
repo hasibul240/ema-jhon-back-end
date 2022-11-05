@@ -1,0 +1,43 @@
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.shop_container {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: 50px
+}
+
+.products_container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 45px;
+    margin-top: 80px;
+}
+
+.cart_container {
+    background-color: rgba(255, 153, 0, 0.3);
+
+}
+
+.pagination{
+    margin-left: 200px;
+    margin-bottom: 30px;
+}
+
+.pagination button{
+    margin-right: 15px;
+}
+
+.pagination .selected{
+    background-color: #ff9900;
+    border: none;
+    color: white;
+}
+
+@media screen and (max-width:1100px) {
+    .products_container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
